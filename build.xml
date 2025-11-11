@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Calcular" default="coverage" basedir="."
+         xmlns:jacoco="antlib:org.jacoco.ant">
+
+    <property name="jacoco.dir" location="lib/jacoco"/>
+    <taskdef uri="antlib:org.jacoco.ant"
+             resource="org/jacoco/ant/antlib.xml">
+        <classpath>
+            <pathelement location="${jacoco.dir}/jacocoant.jar"/>
+        </classpath>
+    </taskdef>
+
+    <target name="coverage" depends="compile">
+        <!-- Genera agente -->
+        <jacoco:agent property="jacoco.agent" destfile="${build.dir}/jacoco.exec"/>
+
+        <!-- Ejecuta el target de test del proyecto NetBeans con el agente -->
+        <antcall target="test">
+            <param name="run.jvmargs" value="${jacoco.agent}"/>
+        </antcall>
+
+        <!-- Asegura que exista la carpeta destino -->
+        <mkdir dir="${build.dir}/reports/jacoco"/>
+
+        <!-- Genera el reporte -->
+        <jacoco:report>
+            <executiondata>
+                <file file="${build.dir}/jacoco.exec"/>
+            </executiondata>
+            <structure name="${ant.project.name}">
+                <classfiles>
+                    <fileset dir="${build.classes.dir}"/>
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="${src.dir}"/>
+                </sourcefiles>
+            </structure>
+            <html destdir="${build.dir}/reports/jacoco"/>
+        </jacoco:report>
+
+        <echo message="✅ Reporte generado en ${build.dir}/reports/jacoco/index.html"/>
+    </target>
+
+    <import file="nbproject/build-impl.xml"/>
+</project>

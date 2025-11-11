@@ -11,7 +11,7 @@ public class Calcular {
     }
 
     public double multiplicar(double numero1, double numero2) {
-        return numero1 * 2;
+        return numero1 * 3;
     }
 
     public double dividir(double numero1, double numero2) {
